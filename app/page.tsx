@@ -1,19 +1,41 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-import "./../app/app.css";
-import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json";
-import "@aws-amplify/ui-react/styles.css";
+import React from 'react';
+import { Amplify } from 'aws-amplify';
+import awsconfig from '../aws-exports'; // Asegúrate de que la ruta es correcta
+import { Authenticator, AuthenticatorProps } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 
-Amplify.configure(outputs);
-export default function App() {
+import "./app.css";
+
+Amplify.configure(awsconfig);
+
+const formFields: AuthenticatorProps['formFields'] = {
+  signUp: {
+    email: {
+      placeholder: 'Enter your email',
+      isRequired: true,
+    }
+  },
+};
+
+const MyComponent = () => {
   return (
-    <main>
-      <h1>Bienvenido a la aplicación</h1>
-      <p>Esta es una página en blanco, lista para nuevas funcionalidades.</p>
-    </main>
+    <Authenticator formFields={formFields}>
+      {({ signOut, user }) => (
+        <main>
+          {user ? (
+            <>
+              <h1>Hello {user.username}</h1>
+              <button onClick={signOut}>Sign out</button>
+            </>
+          ) : (
+            <h1>Loading...</h1>
+          )}
+        </main>
+      )}
+    </Authenticator>
   );
-}
+};
+
+export default MyComponent;
