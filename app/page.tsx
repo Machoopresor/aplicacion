@@ -26,6 +26,7 @@ const theme = {
 const MyComponent = () => {
   return (
     <ThemeProvider theme={{ ...defaultTheme, ...theme }}>
+      <img src="/Engine.jpg" alt="Descripción de la imagen" className="form-image" />
       <div className="auth-container">
         <Authenticator>
           {({ signOut, user }) => (
@@ -36,7 +37,9 @@ const MyComponent = () => {
                   <button onClick={signOut}>Sign out</button>
                 </>
               ) : (
-                <h1>Loading...</h1>
+                <div className="auth-form">
+                  {/* Aquí se renderiza el formulario de autenticación automáticamente */}
+                </div>
               )}
             </main>
           )}
