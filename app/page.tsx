@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
-import awsconfig from '../aws-exports'; // Asegúrate de que la ruta es correcta
+import awsconfig from '../aws-exports';
 import { Authenticator, AuthenticatorProps, ThemeProvider, defaultTheme } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-
-import "./app.css";
-import "./HomePage.css"; // Importa los estilos de HomePage
-import HomePage from './HomePage'; // Importa el nuevo componente
+import HomePage from './HomePage';
+import SearchPage from './SearchPage';
+import AddPage from './AddPage';
+import UploadPage from './UploadPage';
+import FavoritesPage from './FavoritesPage';
+import './app.css';
+import './HomePage.css';
 
 Amplify.configure(awsconfig);
 
@@ -38,41 +42,47 @@ const theme = {
   tokens: {
     components: {
       authenticator: {
-        container: {
-          // Estos estilos se pueden quitar, ya que se manejarán en el CSS
-        },
+        container: {},
       },
     },
   },
 };
 
-const MyComponent = () => {
+const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <ThemeProvider theme={{ ...defaultTheme, ...theme }}>
-      <img src="/Engine.jpg" alt="Descripción de la imagen" className="form-image" />
-      <div className="auth-container">
-        <Authenticator formFields={formFields}>
-          {({ signOut, user }) => {
-            if (user) {
-              setIsAuthenticated(true);
-            }
-            return isAuthenticated ? (
-              <HomePage signOut={signOut} /> // Pasamos signOut como prop
-            ) : (
-              <main>
-                <button onClick={signOut}>Sign out</button>
-                <div className="auth-form">
-                  {/* Aquí puedes agregar más contenido si es necesario */}
-                </div>
-              </main>
-            );
-          }}
-        </Authenticator>
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <Authenticator formFields={formFields}>
+              {({ signOut, user }) => {
+                if (user) {
+                  setIsAuthenticated(true);
+                } else {
+                  setIsAuthenticated(false);
+                }
+                return !isAuthenticated ? (
+                  <div className="auth-container">
+                    <div className="auth-form">
+                      {/* Aquí puedes agregar más contenido si es necesario */}
+                    </div>
+                  </div>
+                ) : (
+                  <HomePage signOut={signOut} />
+                );
+              }}
+            </Authenticator>
+          } />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/add" element={<AddPage />} />
+          <Route path="/upload" element={<UploadPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 };
 
-export default MyComponent;
+export default Page;
