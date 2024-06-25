@@ -2,80 +2,70 @@ import React, { useState } from 'react';
 import './SubirArch.css';
 
 const AddPage = () => {
-  const [subject, setSubject] = useState('');
-  const [topic, setTopic] = useState('');
-  const [fileType, setFileType] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Lógica para manejar el formulario
-    console.log({ subject, topic, fileType });
-  };
+  const [isAddingSubject, setIsAddingSubject] = useState(true);
 
   return (
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
+      <div className="radio-buttons">
         <label>
-          Introducir nombre de materia (obligatorio):
-          <input 
-            type="text" 
-            value={subject} 
-            onChange={(e) => setSubject(e.target.value)} 
-            required 
-            placeholder="Materia" 
+          <input
+            type="radio"
+            value="addSubject"
+            checked={isAddingSubject}
+            onChange={() => setIsAddingSubject(true)}
           />
+          Agregar materia con tema
         </label>
         <label>
-          Introducir nombre del tema (obligatorio):
-          <input 
-            type="text" 
-            value={topic} 
-            onChange={(e) => setTopic(e.target.value)} 
-            required 
-            placeholder="Tema" 
+          <input
+            type="radio"
+            value="addTopic"
+            checked={!isAddingSubject}
+            onChange={() => setIsAddingSubject(false)}
           />
+          Agregar tema a materia existente
         </label>
-        <fieldset>
-          <legend>Escoge el tipo de archivo (Opcional)</legend>
+      </div>
+
+      {isAddingSubject ? (
+        <form>
           <label>
+            Introducir nombre de materia (obligatorio):
             <input 
-              type="radio" 
-              value="PDF" 
-              checked={fileType === 'PDF'} 
-              onChange={(e) => setFileType(e.target.value)} 
+              type="text" 
+              placeholder="Materia" 
             />
-            PDF
           </label>
           <label>
+            Introducir nombre del tema (obligatorio):
             <input 
-              type="radio" 
-              value="Imagen" 
-              checked={fileType === 'Imagen'} 
-              onChange={(e) => setFileType(e.target.value)} 
+              type="text" 
+              placeholder="Tema" 
             />
-            Imagen
+          </label>
+          <button type="submit">Subir</button>
+        </form>
+      ) : (
+        <form>
+          <label>
+            Seleccionar materia existente:
+            <select>
+              <option value="" disabled>Seleccionar materia</option>
+              <option value="Matematicas">Matemáticas</option>
+              <option value="Ciencias">Ciencias</option>
+              <option value="Historia">Historia</option>
+            </select>
           </label>
           <label>
+            Introducir nombre del tema (obligatorio):
             <input 
-              type="radio" 
-              value="Codigo QR" 
-              checked={fileType === 'Codigo QR'} 
-              onChange={(e) => setFileType(e.target.value)} 
+              type="text" 
+              placeholder="Tema" 
             />
-            Codigo QR
           </label>
-          <label>
-            <input 
-              type="radio" 
-              value="Enlace" 
-              checked={fileType === 'Enlace'} 
-              onChange={(e) => setFileType(e.target.value)} 
-            />
-            Enlace
-          </label>
-        </fieldset>
-        <button type="submit">Subir</button>
-      </form>
+          <button type="submit">Subir</button>
+        </form>
+      )}
     </div>
   );
 };
