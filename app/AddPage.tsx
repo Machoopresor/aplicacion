@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SubirArch.css';
 import { ApolloProvider, gql, useQuery, useMutation } from '@apollo/client';
-import client from '../apollo-client'; // Asegúrate de importar el cliente creado anteriormente
+import client from '../src/apollo-client'; // Asegúrate de importar el cliente creado anteriormente
 
 const LIST_SUBJECTS = gql`
   query ListSubjects {
