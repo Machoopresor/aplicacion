@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import awsconfig from './src/aws-exports'; // Asegúrate de que la ruta sea correcta
+import awsconfig from './src/aws-exports';// Asegúrate de que la ruta sea correcta
 
 const client = new ApolloClient({
   uri: awsconfig.aws_appsync_graphqlEndpoint,
